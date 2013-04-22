@@ -1,0 +1,12 @@
+p Here is where the upload form will go.
+
+form(method="post", action="/add/", enctype="multipart/form-data")
+    input(type="hidden", value="butts", name="test")
+    p
+        h1 video file
+        input(type="file", name="video")
+    p
+        h1 xml data
+        input(type="file", name="xml")
+    p
+        input(type="submit", value="go!")

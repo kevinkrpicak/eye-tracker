@@ -1,0 +1,18 @@
+extends base
+
+block body
+    .page-header
+        h1 Eye Tracker Project
+
+    button(id="upload_button", class="pull-right btn btn-success", type="button")
+        i(class="icon-upload icon-white")
+        | Upload
+
+    p.lead See all previously recorded eye-tracker sessions below. Feel free to browse.
+
+    <!-- body -->
+    .row-fluid
+        ul.thumbnails.videos
+
+    <!-- my js!! -->
+    <script src="/javascripts/main2.js"></script>
