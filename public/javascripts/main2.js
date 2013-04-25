@@ -60,7 +60,9 @@ $(document).ready(function(){
         el: '.content_body',
         videoTemplate: $('#video-template').html(),
         events:{
-
+            'click .stop': 'stopPlayback',
+            'click .pause': 'pausePlayback',
+            'click .play': 'playPlayback'
         },
         initialize:function(){
             console.log('video init', this);
@@ -81,6 +83,52 @@ $(document).ready(function(){
         renderResult:function(){
             var data = this.model.toJSON();
             this.$el.html( Mustache.to_html(this.videoTemplate, data) );
+
+            this.$videoArea = this.$('#video_area');
+            // set up important elements
+            this._video = document.getElementById('video'); // want the non-jquery obj for html5 video api
+            // bind video events after video is in dom
+            this.videoEvents();
+
+        },
+        videoEvents:function(){
+            var self = this;
+            this._video.addEventListener('play', function(e){
+                self._play(e, this);
+            });
+            this._video.addEventListener('pause', function(e){
+                self._pause(e, this);
+            });
+        },
+        stopPlayback:function(){
+            try{
+                this.pausePlayback();
+                this._video.currentTime = 0;
+
+                // I'm too lazy to make a custom event or look up how to do it.
+                this._stop(null, this._video);
+            }
+            catch(err){}
+        },
+        pausePlayback:function(){
+            try{ this._video.pause(); }
+            catch(err){}
+        },
+        playPlayback:function(){
+            console.log('play');
+            try{ this._video.play(); }
+            catch(err){}
+        },
+        _play:function(e, el){
+            console.log('play', e, el);
+        },
+        _pause:function(e, el){
+            console.log('pause', e, el);
+        },
+        _stop:function(e, el){
+            console.log('stop', e, el);
+        }
+    });
         }
     });
 
