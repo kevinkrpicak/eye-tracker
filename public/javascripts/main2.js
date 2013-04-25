@@ -6,6 +6,15 @@ $(document).ready(function(){
 
     // Backbone starts...
     var VideoModel = Backbone.Model.extend({
+        url: function(){
+            var _url;
+            try{
+                _url = '/grab/'+this.get('video_id')+'/';
+            } catch(err){
+                _url = '/grab/';
+            }
+            return _url;
+        },
         initialize:function(){
             console.log('init');
         }
@@ -50,17 +59,28 @@ $(document).ready(function(){
     var VideoView = Backbone.View.extend({
         el: '.content_body',
         videoTemplate: $('#video-template').html(),
-        events:{},
+        events:{
+
+        },
         initialize:function(){
-            console.log('video init');
-            this.model = new VideoModel();
+            console.log('video init', this);
+            this.model = new VideoModel({video_id: this.options.id});
+            this.model.on('change', this.renderResult, this);
         },
         render:function(){
-            console.log('video render', this.$el);
-            var data = {};
-            this.$el.html( Mustache.to_html(this.videoTemplate, data) );
+            console.log('render before fetch');
+            this.model.fetch({
+                success:function(model, response, options){
+                    model.trigger('change');
+                }
+            });
+            this.$el.html('grabbing video data');
 
             return this;
+        },
+        renderResult:function(){
+            var data = this.model.toJSON();
+            this.$el.html( Mustache.to_html(this.videoTemplate, data) );
         }
     });
 
@@ -77,7 +97,7 @@ $(document).ready(function(){
 
             try{ data.id = id; }
             catch(err){ /* do nothing*/ }
-
+            console.log('video', data);
             this.view = new VideoView(data).render();
         },
         home: function(){
