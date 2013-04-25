@@ -120,7 +120,7 @@ app.get('/grab-all/', function(req, res){
 
     connection.connect();
     connection.query(
-        'SELECT * FROM eye_tracker_data',
+        'SELECT id, video_name, date_added FROM eye_tracker_data',
         function(err, rows, fields){
             if(err) throw err;
 
@@ -129,9 +129,9 @@ app.get('/grab-all/', function(req, res){
             for(var i = 0, l = rows.length; i < l; i++){
                 row = rows[i];
                 var obj = {
-                    "id": row.id,
+                    "video_id": row.id,
                     "video_name": row.video_name,
-                    "video_data": JSON.parse(row.video_data),
+                    // "video_data": JSON.parse(row.video_data),
                     "date_added": row.date_added
                 };
 
