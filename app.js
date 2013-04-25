@@ -108,6 +108,42 @@ app.post('/add/', function(req, res){
 
 });
 
+// grab all values from eye tracker table
+app.get('/get-all/', function(req, res){
+    var mysql      = require('mysql');
+    var connection = mysql.createConnection({
+        host     : 'localhost',
+        user     : 'root',
+        password : 'root',
+        database : 'eye_tracker'
+    });
+
+    connection.connect();
+    connection.query(
+        'SELECT * FROM eye_tracker_data',
+        function(err, rows, fields){
+            if(err) throw err;
+
+            var data = [];
+            var row;
+            for(var i = 0, l = rows.length; i < l; i++){
+                row = rows[i];
+                var obj = {
+                    "id": row.id,
+                    "video_name": row.video_name,
+                    "video_data": JSON.parse(row.video_data),
+                    "date_added": row.date_added
+                };
+
+                data.push(obj);
+            }
+
+            res.json(data);
+        }
+    );
+    connection.end();
+});
+
 http.createServer(app).listen(app.get('port'), function(){
     console.log("Express server listening on port " + app.get('port'));
 });
