@@ -109,7 +109,7 @@ app.post('/add/', function(req, res){
 });
 
 // grab all values from eye tracker table
-app.get('/get-all/', function(req, res){
+app.get('/grab-all/', function(req, res){
     var mysql      = require('mysql');
     var connection = mysql.createConnection({
         host     : 'localhost',
