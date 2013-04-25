@@ -90,6 +90,11 @@ $(document).ready(function(){
             // bind video events after video is in dom
             this.videoEvents();
 
+            this.canvas = new CanvasView();
+            this.canvas.model = this.model;
+            this.canvas.render();
+            console.log('this.canvas', this.canvas);
+
         },
         videoEvents:function(){
             var self = this;
@@ -129,6 +134,127 @@ $(document).ready(function(){
             console.log('stop', e, el);
         }
     });
+
+    var percentToPixel = function(percent, scale){
+        return percent * scale;
+    };
+    var CanvasView = Backbone.View.extend({
+        el: '.content_body',
+        events:{
+            'click .stop': 'stopCanvas',
+            'click .pause': 'pauseCanvas',
+            'click .play': 'playCanvas'
+        },
+        initialize:function(){
+            console.log('init');
+        },
+        render:function(){
+            console.log("render");
+            this.$videoArea = this.$('.video_area');
+            this.$videoArea.append('<canvas id="canvas" />');
+
+            this.filterBadFixations();
+            this.setUp();
+
+            return this;
+        },
+        ctx:        null,
+        cWidth:     0,
+        cHeight:    0,
+        interval:   null,
+        xPos:       0,
+        yPos:       20,
+        xShift:     1.5,
+        speed:      20,
+        radius:     10,
+        scale:      0.595,
+        shape:      'Circle',
+        style:      "rgba(255, 0, 0, .2)",
+        setUp:function(){
+            var canvas = document.getElementById('canvas');
+            this.ctx = canvas.getContext("2d");
+
+            // set canvas size
+            var videoRegion = this.model.get('video_data').DATA.VIDEO_REGION[0].$;
+            console.log(videoRegion.WIDTH, videoRegion.HEIGHT);
+            // shrink video region
+            videoRegion.WIDTH *= this.scale;
+            videoRegion.HEIGHT *= this.scale;
+            console.log(videoRegion.WIDTH, videoRegion.HEIGHT);
+            $(canvas).attr({
+                width: videoRegion.WIDTH,
+                height: videoRegion.HEIGHT
+            });
+
+            // set global width/height
+            this.cWidth = canvas.width;
+            this.cHeight = canvas.height;
+        },
+        filteredList:null,
+        filterBadFixations:function(){
+            var rec = this.model.get('video_data').DATA.REC;
+            var filtered = rec.filter(function(element, index, array){
+                return !!parseInt(element.$.FPOGV, 10);
+            });
+
+            this.filteredList = filtered;
+        },
+        i:0,
+        animate:function(){
+            var self = this;
+
+            var list = this.filteredList;
+            this.interval = setInterval(function(){
+
+                self.xPos = percentToPixel(list[self.i].$.FPOGX, self.cWidth);
+                self.yPos = percentToPixel(list[self.i].$.FPOGY, self.cHeight);
+                self.draw(self.xPos, self.yPos, self.shape);
+                self.i++;
+
+                // end interval when end reached
+                if(self.i >= list.length){
+                    clearInterval(self.interval);
+                    self.i = 0;
+                }
+
+            }, this.speed);
+
+        },
+        clear: function(ctx){
+            //Clear Canvas
+            ctx.clearRect(0, 0, this.cWidth, this.cHeight);
+        },
+        draw:function(x, y, shape){
+            var ctx = this.ctx;
+            this['draw'+shape](ctx, x, y, this.radius, this.style);
+        },
+
+        drawCircle: function(ctx, x, y, r, style){
+            this.clear(ctx);
+            // redraw
+            ctx.beginPath();
+
+            // arc(x, y, radius, startAngle, endAngle, anticlockwise)
+            ctx.arc(x, y, r, 0, Math.PI*2, true); // Outer circle
+
+            // ctx.lineTo(x, y);
+            ctx.closePath();
+            ctx.stroke();
+
+            ctx.fillStyle = style;
+            ctx.fill();
+        },
+
+        stopCanvas:function(){
+            this.pauseCanvas();
+            this.i = 0;
+        },
+        pauseCanvas:function(){
+            console.log('pause canvas');
+            clearInterval(self.interval);
+        },
+        playCanvas:function(){
+            this.animate();
         }
     });
 

@@ -11,7 +11,14 @@ body{
 }
 .video_area{
     margin-bottom:10px;
+    position:relative;
 }
+    #canvas{
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:999;
+    }
 .actions{
     margin-bottom:50px;
 }
