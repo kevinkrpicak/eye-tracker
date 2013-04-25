@@ -1,4 +1,4 @@
-(function($){
+$(document).ready(function(){
     console.log('hi');
 
     var HomeView = Backbone.View.extend({
@@ -17,6 +17,11 @@
             return this;
         }
     });
+    var VideoModel = Backbone.Model.extend({
+        initialize:function(){
+            console.log('init');
+        }
+    });
 
     var VideoView = Backbone.View.extend({
         el: '.content_body',
@@ -24,29 +29,44 @@
         // statsTemplate: _.template($('#stats-template').html()),
         events:{},
         initialize:function(){
+            console.log('video init');
+            this.model = new VideoModel();
 
         },
         render:function(){
+            console.log('video render', this.$el);
             var data = {};
             this.$el.html( Mustache.to_html(this.videoTemplate, data) );
 
             return this;
+        },
+        noVideo:function(){
+
         }
     });
 
     var router = Backbone.Router.extend({
 
         routes: {
-            "/video/:id": "video",
-            "/": "home"
+            "/video/:id":   "video",
+            "/video/":      "video",
+            '/video':       "video",
+            "*path":        "home"
         },
 
         view: null,
 
         video: function(id){
-            this.view = new VideoView({id: id}).render();
+            console.log("video");
+            var data = {};
+
+            try{ data.id = id; }
+            catch(err){ /* do nothing*/ }
+
+            this.view = new VideoView(data).render();
         },
         home: function(){
+            console.log("home");
             this.view = new HomeView().render();
         }
 
@@ -56,4 +76,4 @@
     Backbone.history.start();
 
 
-})(jQuery);
+});
