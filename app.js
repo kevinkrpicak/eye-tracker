@@ -144,6 +144,42 @@ app.get('/grab-all/', function(req, res){
     connection.end();
 });
 
+app.get('/grab/:id/', function(req, res){
+    var videoId = req.params.id;
+
+    var mysql      = require('mysql');
+    var connection = mysql.createConnection({
+        host     : 'localhost',
+        user     : 'root',
+        password : 'root',
+        database : 'eye_tracker'
+    });
+
+    connection.connect();
+    connection.query(
+        'SELECT * FROM eye_tracker_data WHERE id = ?',
+        [videoId],
+        function(err, rows, fields){
+            if(err) throw err;
+
+            if(rows.length > 1){
+                res.end('something went wrong with the query');
+            }
+
+            var row = rows[0];
+            var data = {
+                "video_id": row.id,
+                "video_name": row.video_name,
+                "video_data": JSON.parse(row.video_data),
+                "date_added": row.date_added
+            };
+
+            res.json(data);
+        }
+    );
+    connection.end();
+});
+
 http.createServer(app).listen(app.get('port'), function(){
     console.log("Express server listening on port " + app.get('port'));
 });
