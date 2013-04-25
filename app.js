@@ -81,7 +81,7 @@ app.post('/add/', function(req, res){
             var connection = mysql.createConnection({
                 host     : 'localhost',
                 user     : 'root',
-                password : 'admin!',
+                password : 'root',
                 database : 'eye_tracker'
             });
 
@@ -101,7 +101,6 @@ app.post('/add/', function(req, res){
                     res.end('success');
                 }
             );
-
             connection.end();
 
         });
