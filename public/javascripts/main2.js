@@ -104,6 +104,10 @@ $(document).ready(function(){
             this._video.addEventListener('pause', function(e){
                 self._pause(e, this);
             });
+
+            this._video.addEventListener('timeupdate', function(e){
+                self.canvas.animate(this.currentTime);
+            });
         },
         stopPlayback:function(){
             try{
@@ -138,6 +142,9 @@ $(document).ready(function(){
     var percentToPixel = function(percent, scale){
         return percent * scale;
     };
+    var timeOffset = function(time, startTime){
+        return parseFloat(time, 10) - parseFloat(startTime, 10);
+    };
     var CanvasView = Backbone.View.extend({
         el: '.content_body',
         events:{
@@ -162,14 +169,12 @@ $(document).ready(function(){
         cWidth:     0,
         cHeight:    0,
         interval:   null,
-        xPos:       0,
-        yPos:       20,
         xShift:     1.5,
-        speed:      20,
+        // speed:      20,
         radius:     10,
         scale:      0.595,
         shape:      'Circle',
-        style:      "rgba(255, 0, 0, .2)",
+        style:      "rgba(255, 0, 0, .9)",
         setUp:function(){
             var canvas = document.getElementById('canvas');
             this.ctx = canvas.getContext("2d");
@@ -189,6 +194,8 @@ $(document).ready(function(){
             // set global width/height
             this.cWidth = canvas.width;
             this.cHeight = canvas.height;
+
+            this.startTime = this.filteredList[0].FPOGS;
         },
         filteredList:null,
         filterBadFixations:function(){
@@ -274,24 +281,47 @@ $(document).ready(function(){
             // this.filteredList = filtered;
         },
         i:0,
-        animate:function(){
+
+        startIndex: 0, // keep track of where you left off in the filtered list array
+        getIndexOfClosestFixation:function(currentTime, list){
+            var low = 0;
+            var high;
+
+            for(var i = this.startIndex; i < list.length; i++){
+                if(timeOffset(list[i].FPOGS, this.startTime) < currentTime){
+                    low = i;
+                }else{
+                    high = i;
+                    break;
+                }
+            }
+
+            this.startIndex = low;
+
+            var lowDiff = currentTime - timeOffset(list[low].FPOGS, this.startTime);
+            var highDiff = timeOffset(list[high].FPOGS, this.startTime) - currentTime;
+
+            // return closest of low/high
+            if(lowDiff < highDiff){
+                return low;
+            }else{
+                return high;
+            }
+        },
+
+        animate:function(currentTime){
             var self = this;
 
+            console.log('animate', currentTime);
+
             var list = this.filteredList;
-            this.interval = setInterval(function(){
 
-                self.xPos = percentToPixel(list[self.i].$.FPOGX, self.cWidth);
-                self.yPos = percentToPixel(list[self.i].$.FPOGY, self.cHeight);
-                self.draw(self.xPos, self.yPos, self.shape);
-                self.i++;
+            var index = this.getIndexOfClosestFixation(currentTime, list);
 
-                // end interval when end reached
-                if(self.i >= list.length){
-                    clearInterval(self.interval);
-                    self.i = 0;
-                }
+            var xPos = percentToPixel(list[index].FPOGX, self.cWidth);
+            var yPos = percentToPixel(list[index].FPOGY, self.cHeight);
+            self.draw( xPos, yPos, self.shape);
 
-            }, this.speed);
 
         },
         clear: function(ctx){
@@ -325,7 +355,6 @@ $(document).ready(function(){
         },
         pauseCanvas:function(){
             console.log('pause canvas');
-            clearInterval(self.interval);
         },
         playCanvas:function(){
             this.animate();
