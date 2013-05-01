@@ -70,7 +70,11 @@ app.post('/add/', function(req, res){
 
                     var xml = data;
                     parseString(xml, function (err, result) {
-                        callback(null, JSON.stringify(result));
+                        var newPath = __dirname + "/public/json/" + xmlFile.name + ".json";
+                        fs.writeFile(newPath, JSON.stringify(result), function(err){
+                            callback(null, xmlFile.name+".json");
+                        });
+
                     });
                 });
             }
@@ -170,11 +174,17 @@ app.get('/grab/:id/', function(req, res){
             var data = {
                 "video_id": row.id,
                 "video_name": row.video_name,
-                "video_data": JSON.parse(row.video_data),
+                "video_data_name": row.video_data,
                 "date_added": row.date_added
             };
 
-            res.json(data);
+            // grab json file
+            fs.readFile(__dirname + "/public/json/"+row.video_data, 'utf8', function (err, _data) {
+                if(err) throw err;
+
+                data["video_data"] = JSON.parse(_data);
+                res.json(data);
+            });
         }
     );
     connection.end();
