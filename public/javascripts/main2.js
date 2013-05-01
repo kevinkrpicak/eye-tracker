@@ -197,7 +197,81 @@ $(document).ready(function(){
                 return !!parseInt(element.$.FPOGV, 10);
             });
 
-            this.filteredList = filtered;
+            function avg(array){
+                var sum = 0;
+                for(var i = 0; i < array.length; i++){
+                    sum += parseFloat(array[i], 10);
+                }
+                return sum/array.length;
+            }
+
+            function groupList(_data, _list, _keys){
+
+                var list = _list;
+                var keys = _keys;
+                var idKey = _data.id;
+                var timeKey = _data.time;
+                var obj = {};
+                var endObj = {};
+                endObj[idKey] = list[0][idKey];
+                endObj[timeKey] = list[0][timeKey];
+
+                // set up initial obj
+                for(var k = 0; k < keys.length; k++){
+                    obj[keys[k]] = [];
+                }
+
+                // console.log('obj: ', obj);
+
+                var item;
+                for(var i = 0; i < list.length; i++){
+                    item = list[i];
+                    // console.log('item: ', item);
+                    for(var j = 0; j < keys.length; j++){
+                        obj[keys[j]].push( item[keys[j]] );
+
+                        if(i+1 == list.length){
+                            endObj[keys[j]] = avg( obj[keys[j]] );
+                        }
+                    }
+                }
+
+                return endObj;
+            }
+
+            function groupBySameKey(_data, _list, _keys){
+                var list = _list;
+                var keys = _keys;
+                var idKey = _data.id;
+                var endList = [];
+                var gl = [];
+
+                var currentKey = list[0].$[idKey];
+                for(var i = 0; i < list.length; i++){
+
+                    if(list[i].$[idKey] != currentKey){
+                        endList.push( groupList(_data, gl, keys) );
+
+                        // console.log("   reset");
+                        // reset
+                        gl.length = 0;
+                        currentKey = list[i].$[idKey];
+                    }
+
+                    gl.push( list[i].$ );
+
+                }
+                endList.push( groupList(_data, gl, keys) );
+
+                return endList;
+            }
+
+
+            this.filteredList = groupBySameKey({id: "FPOGID", time: "FPOGS"}, filtered, ["FPOGX", "FPOGY"]);
+            console.log('length: ', this.filteredList.length);
+            // console.log(this.filteredList);
+
+            // this.filteredList = filtered;
         },
         i:0,
         animate:function(){
