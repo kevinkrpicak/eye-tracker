@@ -152,7 +152,9 @@ $(document).ready(function(){
         events:{
             'click .stop': 'stopCanvas',
             'click .pause': 'pauseCanvas',
-            'click .play': 'playCanvas'
+            'click .play': 'playCanvas',
+            'click .default-fixation': 'defaultFixation',
+            'click .heatmap-fixation': 'heatmapFixation'
         },
         initialize:function(){
             console.log('init');
@@ -368,13 +370,21 @@ $(document).ready(function(){
         },
 
         defaultFixation:function(e){
+            this.setActiveClass(e);
 
             console.log('default');
             this.shape = "Circle";
 
             this.$('#heatmap_area').empty();
         },
+
+        setActiveClass:function(e){
+            this.$('.data-display > .btn').removeClass('active');
+            $(e.currentTarget).addClass('active');
+        },
+
         heatmapFixation:function(e){
+            this.setActiveClass(e);
 
             console.log("set heatmap");
 
