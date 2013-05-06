@@ -304,10 +304,13 @@ $(document).ready(function(){
             this.startIndex = low;
 
             var lowDiff = currentTime - timeOffset(list[low].FPOGS, this.startTime);
-            var highDiff = timeOffset(list[high].FPOGS, this.startTime) - currentTime;
+            var highDiff;
+            if(high){
+                highDiff = timeOffset(list[high].FPOGS, this.startTime) - currentTime;
+            }
 
             // return closest of low/high
-            if(lowDiff < highDiff){
+            if(highDiff == 'undefined' || lowDiff < highDiff){
                 return low;
             }else{
                 return high;
@@ -323,11 +326,14 @@ $(document).ready(function(){
 
             var index = this.getIndexOfClosestFixation(currentTime, list);
 
-            var xPos = percentToPixel(list[index].FPOGX, self.cWidth);
-            var yPos = percentToPixel(list[index].FPOGY, self.cHeight);
-            self.draw( xPos, yPos, self.shape);
+            try{
+                var xPos = percentToPixel(list[index].FPOGX, self.cWidth);
+                var yPos = percentToPixel(list[index].FPOGY, self.cHeight);
 
-
+                self.draw( xPos, yPos, self.shape);
+            } catch(err){
+                // no more values
+            }
         },
         clear: function(ctx){
             //Clear Canvas
