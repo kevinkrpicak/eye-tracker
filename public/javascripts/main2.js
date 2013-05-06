@@ -107,6 +107,9 @@ $(document).ready(function(){
 
             this._video.addEventListener('timeupdate', function(e){
                 self.canvas.animate(this.currentTime);
+
+                // keep track if the movie has ended
+                self.ended = this.ended;
             });
         },
         stopPlayback:function(){
@@ -130,6 +133,11 @@ $(document).ready(function(){
         },
         _play:function(e, el){
             console.log('play', e, el);
+
+            // dirty way of forcing heatmap to reset
+            if(this.ended && this.canvas.shape == "Heatmap"){
+                this.canvas.heatmapFixation();
+            }
         },
         _pause:function(e, el){
             console.log('pause', e, el);
@@ -370,7 +378,9 @@ $(document).ready(function(){
         },
 
         defaultFixation:function(e){
-            this.setActiveClass(e);
+            try{
+                this.setActiveClass(e);
+            }catch(err){}
 
             console.log('default');
             this.shape = "Circle";
@@ -384,7 +394,9 @@ $(document).ready(function(){
         },
 
         heatmapFixation:function(e){
-            this.setActiveClass(e);
+            try{
+                this.setActiveClass(e);
+            }catch(err){}
 
             console.log("set heatmap");
 
