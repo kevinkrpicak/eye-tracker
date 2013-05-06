@@ -29,7 +29,8 @@ $(document).ready(function(){
     });
 
     var HomeView = Backbone.View.extend({
-        el: '.content_body',
+        // el: '.content_body',
+        className: 'template-wrapper',
         events:{},
         fooTemplate: $('#home-template').html(),
         initialize:function(){
@@ -57,7 +58,8 @@ $(document).ready(function(){
     });
 
     var VideoView = Backbone.View.extend({
-        el: '.content_body',
+        // el: '.content_body',
+        className: 'template-wrapper',
         videoTemplate: $('#video-template').html(),
         events:{
             'click .stop': 'stopPlayback',
@@ -146,7 +148,7 @@ $(document).ready(function(){
         return parseFloat(time, 10) - parseFloat(startTime, 10);
     };
     var CanvasView = Backbone.View.extend({
-        el: '.content_body',
+        el: '.template-wrapper',
         events:{
             'click .stop': 'stopCanvas',
             'click .pause': 'pauseCanvas',
@@ -159,6 +161,7 @@ $(document).ready(function(){
             console.log("render");
             this.$videoArea = this.$('.video_area');
             this.$videoArea.append('<canvas id="canvas" />');
+            this.$videoArea.append('<div id="heatmap_area" style="position:absolute; top:0; left:0; width:680px; height:382px;" />');
 
             this.filterBadFixations();
             this.setUp();
@@ -172,7 +175,7 @@ $(document).ready(function(){
         xShift:     1.5,
         // speed:      20,
         radius:     10,
-        scale:      0.595,
+        scale:      0.3541666667,
         shape:      'Circle',
         style:      "rgba(255, 0, 0, .9)",
         setUp:function(){
@@ -349,6 +352,10 @@ $(document).ready(function(){
             ctx.fill();
         },
 
+        drawHeatmap:function(ctx, x, y){
+            this.heatmap.store.addDataPoint(Math.round(x),Math.round(y));
+        },
+
         stopCanvas:function(){
             this.pauseCanvas();
             this.i = 0;
@@ -358,7 +365,34 @@ $(document).ready(function(){
         },
         playCanvas:function(){
             this.animate();
+        },
+
+        defaultFixation:function(e){
+
+            console.log('default');
+            this.shape = "Circle";
+
+            this.$('#heatmap_area').empty();
+        },
+        heatmapFixation:function(e){
+
+            console.log("set heatmap");
+
+            this.shape = "Heatmap";
+
+            // clear canvas before starting heatmap
+            this.clear(this.ctx);
+            this.$('#heatmap_area').empty();
+
+            // initialize heatmap
+            this.heatmap = h337.create({
+                "element":document.getElementById("heatmap_area"),
+                "radius":25,
+                "visible":true
+            });
+
         }
+
     });
 
     var router = Backbone.Router.extend({
@@ -368,18 +402,33 @@ $(document).ready(function(){
             "*path":            "home"
         },
         view: null,
+        $contentBody: $('.content_body'),
         video: function(id){
             console.log("video");
             var data = {};
 
             try{ data.id = id; }
             catch(err){ /* do nothing*/ }
-            console.log('video', data);
-            this.view = new VideoView(data).render();
+
+            if(this.view){
+                this.view.remove();
+            }
+            this.view = new VideoView(data);
+
+            this.render();
         },
         home: function(){
-            console.log("home");
-            this.view = new HomeView().render();
+            console.log("home route");
+
+            if(this.view){
+                this.view.remove();
+            }
+            this.view = new HomeView();
+
+            this.render();
+        },
+        render:function(){
+            this.$contentBody.html(this.view.render().el);
         }
     });
 
