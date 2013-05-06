@@ -1,9 +1,5 @@
 $(document).ready(function(){
 
-    // $(document).on("click", ".exempt", function(e){
-    //     e.preventDefault();
-    // });
-
     // Backbone starts...
     var VideoModel = Backbone.Model.extend({
         url: function(){
@@ -15,21 +11,17 @@ $(document).ready(function(){
             }
             return _url;
         },
-        initialize:function(){
-            console.log('init');
-        }
+        initialize:function(){}
     });
 
     var GrabAllCollection = Backbone.Collection.extend({
         url: '/grab-all/',
         model: VideoModel,
-        initialize:function(){
-            console.log('collection init');
-        }
+        initialize:function(){}
     });
 
+    // Home page
     var HomeView = Backbone.View.extend({
-        // el: '.content_body',
         className: 'template-wrapper',
         events:{},
         fooTemplate: $('#home-template').html(),
@@ -55,8 +47,8 @@ $(document).ready(function(){
         }
     });
 
+    // Individual video page
     var VideoView = Backbone.View.extend({
-        // el: '.content_body',
         className: 'template-wrapper',
         videoTemplate: $('#video-template').html(),
         events:{
@@ -65,12 +57,10 @@ $(document).ready(function(){
             'click .play': 'playPlayback'
         },
         initialize:function(){
-            console.log('VideoView init', this);
             this.model = new VideoModel({video_id: this.options.id});
             this.model.on('reset', this.renderResult, this);
         },
         render:function(){
-            console.log('VideoView render');
             this.model.fetch({
                 success:function(model, response, options){
                     model.trigger('reset');
@@ -90,11 +80,10 @@ $(document).ready(function(){
             // bind video events after video is in dom
             this.videoEvents();
 
+            // render canvas after data comes back for video
             this.canvas = new CanvasView();
             this.canvas.model = this.model;
             this.canvas.render();
-            console.log('this.canvas', this.canvas);
-
         },
         videoEvents:function(){
             var self = this;
@@ -117,7 +106,7 @@ $(document).ready(function(){
                 this.pausePlayback();
                 this._video.currentTime = 0;
 
-                // I'm too lazy to make a custom event or look up how to do it.
+                // todo: custom event for video stop
                 this._stop(null, this._video);
             }
             catch(err){}
@@ -127,12 +116,11 @@ $(document).ready(function(){
             catch(err){}
         },
         playPlayback:function(){
-            console.log('play');
             try{ this._video.play(); }
             catch(err){}
         },
         _play:function(e, el){
-            console.log('play', e, el);
+            // console.log('play', e, el);
 
             // dirty way of forcing heatmap to reset
             if(this.ended && this.canvas.shape == "Heatmap"){
@@ -140,10 +128,10 @@ $(document).ready(function(){
             }
         },
         _pause:function(e, el){
-            console.log('pause', e, el);
+            // console.log('pause', e, el);
         },
         _stop:function(e, el){
-            console.log('stop', e, el);
+            // console.log('stop', e, el);
         }
     });
 
@@ -162,9 +150,7 @@ $(document).ready(function(){
             'click .default-fixation': 'defaultFixation',
             'click .heatmap-fixation': 'heatmapFixation'
         },
-        initialize:function(){
-            console.log('CanvasView init');
-        },
+        initialize:function(){},
         render:function(){
             this.$videoArea = this.$('.video_area');
             this.$videoArea.append('<canvas id="canvas" />');
@@ -176,6 +162,7 @@ $(document).ready(function(){
             return this;
         },
 
+        // defaults for normal canvas rendering
         ctx:        null,
         cWidth:     0,
         cHeight:    0,
@@ -206,6 +193,7 @@ $(document).ready(function(){
             this.cWidth = canvas.width;
             this.cHeight = canvas.height;
 
+            // need startTime to figure out offset of actual start time
             this.startTime = this.filteredList[0].FPOGS;
 
         },
@@ -216,6 +204,7 @@ $(document).ready(function(){
                 return !!parseInt(element.$.FPOGV, 10);
             });
 
+            // average grouped items per property
             function avg(array){
                 var sum = 0;
                 for(var i = 0; i < array.length; i++){
@@ -224,8 +213,8 @@ $(document).ready(function(){
                 return sum/array.length;
             }
 
+            // each property has grouped items
             function groupList(_data, _list, _keys){
-
                 var list = _list;
                 var keys = _keys;
                 var idKey = _data.id;
@@ -240,12 +229,9 @@ $(document).ready(function(){
                     obj[keys[k]] = [];
                 }
 
-                // console.log('obj: ', obj);
-
                 var item;
                 for(var i = 0; i < list.length; i++){
                     item = list[i];
-                    // console.log('item: ', item);
                     for(var j = 0; j < keys.length; j++){
                         obj[keys[j]].push( item[keys[j]] );
 
@@ -258,6 +244,7 @@ $(document).ready(function(){
                 return endObj;
             }
 
+            // group list by keys
             function groupBySameKey(_data, _list, _keys){
                 var list = _list;
                 var keys = _keys;
@@ -271,7 +258,6 @@ $(document).ready(function(){
                     if(list[i].$[idKey] != currentKey){
                         endList.push( groupList(_data, gl, keys) );
 
-                        // console.log("   reset");
                         // reset
                         gl.length = 0;
                         currentKey = list[i].$[idKey];
@@ -285,12 +271,8 @@ $(document).ready(function(){
                 return endList;
             }
 
-
+            // final fixations
             this.filteredList = groupBySameKey({id: "FPOGID", time: "FPOGS"}, filtered, ["FPOGX", "FPOGY"]);
-            console.log('length: ', this.filteredList.length);
-            // console.log(this.filteredList);
-
-            // this.filteredList = filtered;
         },
 
         startIndex: 0, // keep track of where you left off in the filtered list array
@@ -368,11 +350,8 @@ $(document).ready(function(){
 
         stopCanvas:function(){
             this.pauseCanvas();
-            this.i = 0;
         },
-        pauseCanvas:function(){
-            console.log('pause canvas');
-        },
+        pauseCanvas:function(){},
         playCanvas:function(){
             this.animate();
         },
@@ -382,9 +361,9 @@ $(document).ready(function(){
                 this.setActiveClass(e);
             }catch(err){}
 
-            console.log('default');
             this.shape = "Circle";
 
+            // empty heat map when switching to default
             this.$('#heatmap_area').empty();
         },
 
@@ -398,12 +377,12 @@ $(document).ready(function(){
                 this.setActiveClass(e);
             }catch(err){}
 
-            console.log("set heatmap");
-
             this.shape = "Heatmap";
 
             // clear canvas before starting heatmap
             this.clear(this.ctx);
+
+            // clear existing heatmap
             this.$('#heatmap_area').empty();
 
             // initialize heatmap
@@ -417,6 +396,7 @@ $(document).ready(function(){
 
     });
 
+    // route pages based off hashed url
     var router = Backbone.Router.extend({
         routes: {
             "/video/*path":     "video",
@@ -426,7 +406,6 @@ $(document).ready(function(){
         view: null,
         $contentBody: $('.content_body'),
         video: function(id){
-            console.log("video route");
             var data = {};
 
             try{ data.id = id; }
@@ -440,8 +419,6 @@ $(document).ready(function(){
             this.render();
         },
         home: function(){
-            console.log("home route");
-
             if(this.view){
                 this.view.remove();
             }
