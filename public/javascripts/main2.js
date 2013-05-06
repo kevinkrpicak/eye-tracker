@@ -35,7 +35,6 @@ $(document).ready(function(){
         fooTemplate: $('#home-template').html(),
         initialize:function(){
             this.collection = new GrabAllCollection();
-
             this.collection.on('reset', this.renderResults, this);
         },
         render:function(){
@@ -49,7 +48,6 @@ $(document).ready(function(){
             return this;
         },
         renderResults:function(){
-            console.log('render results');
             var data = {
                 videos: this.collection.toJSON()
             };
@@ -67,18 +65,18 @@ $(document).ready(function(){
             'click .play': 'playPlayback'
         },
         initialize:function(){
-            console.log('video init', this);
+            console.log('VideoView init', this);
             this.model = new VideoModel({video_id: this.options.id});
-            this.model.on('change', this.renderResult, this);
+            this.model.on('reset', this.renderResult, this);
         },
         render:function(){
-            console.log('render before fetch');
+            console.log('VideoView render');
             this.model.fetch({
                 success:function(model, response, options){
-                    model.trigger('change');
+                    model.trigger('reset');
                 }
             });
-            this.$el.html('grabbing video data');
+            this.$el.html('grabbing video data...');
 
             return this;
         },
@@ -157,10 +155,9 @@ $(document).ready(function(){
             'click .heatmap-fixation': 'heatmapFixation'
         },
         initialize:function(){
-            console.log('init');
+            console.log('CanvasView init');
         },
         render:function(){
-            console.log("render");
             this.$videoArea = this.$('.video_area');
             this.$videoArea.append('<canvas id="canvas" />');
             this.$videoArea.append('<div id="heatmap_area" style="position:absolute; top:0; left:0; width:680px; height:382px;" />');
@@ -170,27 +167,28 @@ $(document).ready(function(){
 
             return this;
         },
+
         ctx:        null,
         cWidth:     0,
         cHeight:    0,
         interval:   null,
         xShift:     1.5,
-        // speed:      20,
         radius:     10,
         scale:      0.3541666667,
         shape:      'Circle',
         style:      "rgba(255, 0, 0, .9)",
+
         setUp:function(){
             var canvas = document.getElementById('canvas');
             this.ctx = canvas.getContext("2d");
 
             // set canvas size
             var videoRegion = this.model.get('video_data').DATA.VIDEO_REGION[0].$;
-            console.log(videoRegion.WIDTH, videoRegion.HEIGHT);
+
             // shrink video region
             videoRegion.WIDTH *= this.scale;
             videoRegion.HEIGHT *= this.scale;
-            console.log(videoRegion.WIDTH, videoRegion.HEIGHT);
+
             $(canvas).attr({
                 width: videoRegion.WIDTH,
                 height: videoRegion.HEIGHT
@@ -201,6 +199,7 @@ $(document).ready(function(){
             this.cHeight = canvas.height;
 
             this.startTime = this.filteredList[0].FPOGS;
+
         },
         filteredList:null,
         filterBadFixations:function(){
@@ -285,7 +284,6 @@ $(document).ready(function(){
 
             // this.filteredList = filtered;
         },
-        i:0,
 
         startIndex: 0, // keep track of where you left off in the filtered list array
         getIndexOfClosestFixation:function(currentTime, list){
@@ -319,11 +317,7 @@ $(document).ready(function(){
 
         animate:function(currentTime){
             var self = this;
-
-            console.log('animate', currentTime);
-
             var list = this.filteredList;
-
             var index = this.getIndexOfClosestFixation(currentTime, list);
 
             try{
@@ -420,7 +414,7 @@ $(document).ready(function(){
         view: null,
         $contentBody: $('.content_body'),
         video: function(id){
-            console.log("video");
+            console.log("video route");
             var data = {};
 
             try{ data.id = id; }
