@@ -1,5 +1,32 @@
 $(document).ready(function(){
 
+    // Helper functions
+    var loaderDom = function(msg){
+        if(!msg){ msg = ''; }
+        return '<div class="progress progress-striped active loader"><div class="bar">'+msg+'</div></div>';
+    };
+
+    var formatTime = function(timestamp){
+        console.log('format time', timestamp);
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+        var hours = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+        var time, meridian;
+
+        var date  = new Date(timestamp*1000);
+        var month = date.getMonth();
+        var day   = date.getDate();
+
+        var hour = date.getHours();
+        var minutes = date.getMinutes();
+        var year = date.getFullYear();
+
+        if(hour >= 13 && hour <= 23){ time = hours[hour]; } else { time = hours[hour]; }
+        if(minutes >= 0 && minutes <= 9){ time = time+':0'+minutes; } else { time = time+':'+minutes; }
+        if(hour >= 0 && hour <= 11){ meridian = 'AM'; } else { meridian = 'PM'; }
+
+        return time+' '+meridian+' '+months[month]+' '+day+', '+year;
+    };
+
     // Backbone starts...
     var VideoModel = Backbone.Model.extend({
         url: function(){
@@ -16,6 +43,14 @@ $(document).ready(function(){
 
     var GrabAllCollection = Backbone.Collection.extend({
         url: '/grab-all/',
+        parse:function(response){
+            console.log(response);
+            for(var i = 0, l = response.length; i < l; i++){
+                response[i].date_added = formatTime(response[i].date_added);
+            }
+
+            return response;
+        },
         model: VideoModel,
         initialize:function(){}
     });
@@ -35,7 +70,7 @@ $(document).ready(function(){
                     collection.trigger('reset');
                 }
             });
-            this.$el.html( 'doing some work...');
+            this.$el.html(loaderDom("Grabbing All Eye-tracker Sessions..."));
 
             return this;
         },
@@ -66,7 +101,7 @@ $(document).ready(function(){
                     model.trigger('reset');
                 }
             });
-            this.$el.html('grabbing video data...');
+            this.$el.html(loaderDom('Grabbing Video Data...'));
 
             return this;
         },

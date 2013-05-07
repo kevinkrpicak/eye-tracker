@@ -8,6 +8,10 @@ body{
     margin-left:10px;
 }
 
+#video{
+    background:#000;
+}
+
 .videos .video:nth-child(3n+1){
     margin-left:0;
 }
@@ -24,3 +28,13 @@ body{
 .actions{
     margin-bottom:50px;
 }
+
+.loader{
+    margin-bottom:0;
+    margin-left:10px;
+    height:40px;
+    line-height:40px;
+}
+    .loader .bar{
+        width:100%;
+    }
