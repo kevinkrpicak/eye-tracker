@@ -124,7 +124,7 @@ app.get('/grab-all/', function(req, res){
 
     connection.connect();
     connection.query(
-        'SELECT id, video_name, date_added FROM eye_tracker_data',
+        'SELECT id, video_name, UNIX_TIMESTAMP(date_added) AS date_added FROM eye_tracker_data',
         function(err, rows, fields){
             if(err) throw err;
 
@@ -161,7 +161,7 @@ app.get('/grab/:id/', function(req, res){
 
     connection.connect();
     connection.query(
-        'SELECT * FROM eye_tracker_data WHERE id = ?',
+        'SELECT id, video_name, video_data, UNIX_TIMESTAMP(date_added) AS date_added FROM eye_tracker_data WHERE id = ?',
         [videoId],
         function(err, rows, fields){
             if(err) throw err;
