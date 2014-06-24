@@ -1,0 +1,148 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1138\cocoasubrtf510
+{\fonttbl\f0\fswiss\fcharset0 ArialMT;}
+{\colortbl;\red255\green255\blue255;\red17\green85\blue204;}
+{\info
+{\author Kevin Krpicak}}\vieww16860\viewh15120\viewkind1\viewscale150
+\deftab720
+\pard\pardeftab720\ri0
+
+\f0\fs24 \cf0 ttalk to connie or lab assistant and ask for access to room 229\uc0\u8232 sign up sheet to use equipment\u8232 \u8232 \u8232 eye tracker gives you xml or csv file\u8232 and video file which is avi\u8232 \u8232 xml gives x/y coordinate\u8232 \u8232 streaming video and then visualization\u8232 \u8232 230 - 300pm meeting on thursday for capstone feb7th.\u8232 \u8232 
+\b Create VM:
+\b0 \uc0\u8232 \
+\pard\pardeftab720\fi720\ri0
+
+\b \cf0 vm info
+\b0 \
+\pard\pardeftab720\ri0
+\cf0 	name: kkrpicak\uc0\u8232 	username: kkrpicak\u8232 	old - password: password1!\
+	password: kevink1!\
+\uc0\u8232 \
+\pard\pardeftab720\li720\ri0
+\cf0 dns name: kkrpicakcapstone.cloudapp.net\
+\pard\pardeftab720\ri0
+\cf0 \uc0\u8232 	
+\b upgrade linux vm
+\b0 \
+\pard\pardeftab720\li720\ri0
+\cf0 sudo apt-get update\
+sudo apt-get upgrade\
+\pard\pardeftab720\ri0
+\cf0 \
+\pard\pardeftab720\li720\ri0
+
+\b \cf0 install mysql
+\b0 \
+apt-git install mysql-server\
+\
+
+\b mysql info:
+\b0 \
+user: root \
+password: admin!\
+\pard\pardeftab720\ri0
+\cf0 \
+\pard\pardeftab720\li720\ri0
+
+\b \cf0 set up mysql
+\b0 \
+cd /etc/mysql/\
+sudo cp my.cnf my.cnf.old\
+\pard\pardeftab720\ri0
+\cf0 \
+\pard\pardeftab720\li720\ri0
+
+\b \cf0 bind mysql to ip
+\b0 \
+sudo vi my.cnf\
+bind-address = 0.0.0.0 \'a0// set to allow all ips\
+\pard\pardeftab720\ri0
+\cf0 \
+\pard\pardeftab720\li720\ri0
+
+\b \cf0 add azure endpoints
+\b0  
+\b for db access
+\b0 \
+mysql, tcp, 3306, 3306, kkrpicakvm\
+\pard\pardeftab720\ri0
+\cf0 \
+\pard\pardeftab720\li720\ri0
+
+\b \cf0 install node
+\b0 \
+sudo apt-get install python-software-properties python g++ make\
+sudo add-apt-repository ppa:chris-lea/node.js\
+sudo apt-get update\
+sudo apt-get install nodejs npm\
+\pard\pardeftab720\ri0
+\cf0 \
+\pard\pardeftab720\li720\ri0
+
+\b \cf0 add azure endpoints for http access
+\b0 \
+http, tcp, 80, 80, kkrpicakvm\
+\pard\pardeftab720\ri0
+\cf0 \
+\pard\pardeftab720\li720\ri0
+
+\b \cf0 run node test.js
+\b0 \
+vi test.js \
+sudo node test.js // run file - need sudo for under port 1000* i think ha\
+\pard\pardeftab720\li720\ri0
+{\field{\*\fldinst{HYPERLINK "http://kkrpicak-vm.c"}}{\fldrslt \cf2 \ul \ulc2 http://kkrpicak-vm.cloudapp.net/}}\
+\pard\pardeftab720\ri0
+\cf0 \
+\pard\pardeftab720\li720\ri0
+
+\b \cf0 install npm
+\b0 \
+\pard\pardeftab720\li720\ri0
+{\field{\*\fldinst{HYPERLINK "https://ariejan.net/2011/10/24/installing-node-js-and-npm-on-ubuntu-debian"}}{\fldrslt \cf2 \ul \ulc2 https://ariejan.net/2011/10/24/installing-node-js-and-npm-on-ubuntu-debian}}\
+\
+\pard\pardeftab720\li720\ri0
+
+\b \cf0 install mysql package for node\
+\pard\pardeftab720\li720\ri0
+
+\b0 \cf0 npm install mysql\
+\pard\pardeftab720\ri0
+\cf0 \uc0\u8232 
+\b \
+talk with shibble:
+\b0 \uc0\u8232 html 5 video events api\u8232 jade\u8232 express\
+db structure\
+talk about video storing options \
+\
+	
+\b install express (globally)\
+	
+\b0 sudo npm install -g express\
+\
+	
+\b setup express project\
+	
+\b0 express project-name\
+	npm install\uc0\u8232 	\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+________\
+\
+data base info:\
+\
+table structure:\
+	id, int, 11, unsigned, primary key, auto_increment\
+	video_name, varchar, 255\
+	video_data, longtext\
+	date_added, datetime\
+________\
+\
+}

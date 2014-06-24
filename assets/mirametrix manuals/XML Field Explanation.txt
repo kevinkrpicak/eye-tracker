@@ -1,0 +1,203 @@
+Average calibration error		Number of successful calibration points
+<CALIB_ERROR AVE_ERROR="    32.41" VALID_POINTS="  9" />
+
+Version
+<FILE_FORMAT TYPE="VIEWER" VER="1.1" />
+
+This is the width and height of the screen
+<SCREEN_SIZE WIDTH="1920" HEIGHT="1080" />
+
+this is the width and height of the tracked region which is 100% of screen size in this case
+<VIDEO_REGION X="1680" Y="0" WIDTH="1920" HEIGHT="1080" />
+
+A counter that is incremented by 1 at each record.  Sequence counter for data packets.  Type integer.
+CNT="6428" 
+
+Elapsed time in seconds since last system initialization or calibration.
+TIME="38.417" 
+
+Elapsed time tick count (signed 64 bit integer)
+TIME_TICK="15422500790" 
+
+Fixation point of gaze (X, Y, start (seconds), duration (elapsed time since fixation start in seconds), Fixation number ID, valid flag
+FPOGX="0.53646" 
+FPOGY="0.40463" 
+FPOGS="38.023" 
+FPOGD="0.394" 
+FPOGID="141" 
+FPOGV="1" 
+
+Left eye point of gaze (X, Y, Valid flag)
+LPOGX="0.53802" 
+LPOGY="0.42685" 
+LPOGV="1" 
+
+Right eye point of gaze (X, Y, Valid flag)
+RPOGX="0.52500" 
+RPOGY="0.43889" 
+RPOGV="1" 
+
+Best point of gaze (X, Y, Valid flag).  This is the average of the left and right POG estimates if both are valid.  If either is invalid, the best is equal to the remaining valid POG.
+BPOGX="0.53125" 
+BPOGY="0.43241" 
+BPOGV="1" 
+
+
+Left eye pupil center X, Y, diameter in pixels, distance (unit less, from calibration position), valid
+LPCX="0.25451" 
+LPCY="0.77009" 
+LPD="25.76" 
+LPS="0.97" 
+LPV="1" 
+
+Right eye pupil center X, Y, diameter in pixels, distance (unit less, from calibration position), valid
+RPCX="0.66078" 
+RPCY="0.70693" 
+RPD="27.18" 
+RPS="1.00" 
+RPV="1" 
+
+Left eye position X -left/+right (cm), Y -down/+up (cm), Z -away,+toward (cm), valid, pupil diameter(mm), valid(0- invalid, 1=valid, 2=valid but old position data)
+LEYEX="-3.938" 
+LEYEY="-2.904" 
+LEYEZ="56.943" 
+LEYEV="1" 
+LPUPILD="5.502" 
+LPUPILV="1" 
+
+
+Right eye position X -left/+right (cm), Y -down/+up (cm), Z -away,+toward (cm), valid, pupil diameter(mm), valid(0- invalid, 1=valid, 2=valid but old position data)
+REYEX="2.572" 
+REYEY="-2.292" 
+REYEZ="57.668" 
+REYEV="1" 
+RPUPILD="5.877" 
+RPUPILV="1" 
+
+Cursor X position, Y position, Cursor button state (0=no press, 1=left button down, 2=left button up, 3=left double click, 4=right button down, 5=right button up, 6=right double click)
+CX="-0.46146" 
+CY="0.56111" 
+CS="0"
+
+
+
+
+
+Other notes:
+=======================================================================================================
+Recorded screen size is truncated to a multiple of 4 before saving to optimize images for compression.  Compresssion uses FFDSHOW codec.
+
+************ In tracker check under gaze settings -> fixation vs. standard option
+
+Coordinates
+---------------
+All reported coordinates are in percentages of tracking window (unless otherwise specified), which itself is in percentages of the screen size.  
+By default the tracking window is 100% of the screen size so only screen size is required  to convert from the reported X,Y coordinates to pixels.
+For X coordinates 0 is the right most position and 1 is the left most position
+For Y coordinates 0 is the top most position and 1 is the bottom most position
+
+0,0		0,1
+
+
+0,1		1,1
+
+For pupil image coordinates the X,Y values are precentages of the camera image size.  
+
+
+Data records
+---------------------
+Counter
+Time
+Time Tick
+Gaze Left Eye
+Gaze Right Eye
+Gaze Best
+Gaze Fixation
+Pupil Left Eye
+Pupil Right Eye
+Position Left Eye
+Position Right Eye
+Cursor
+Viewer Time Tick  (only in CSV format, cpu timer tick the instant the data record is received)
+
+LAtency = (viewer time tick - time tick)/time tick freq
+
+Log files
+---------------
+calib error average			CALIB AVE ERROR
+# of successful calib points CALIB VALID POINTS
+file format ver #	FILE FORMAT VER
+freq of cpu timer   TIME TICK FREQ
+screen size			SCREEN SIZE
+region recorded		VIDEO REGION
+
+
+
+An example fixation id = 1458
+-------------------------------------
+
+<REC CNT="29539" TIME="418.089" TIME_TICK="16686855467" FPOGX="0.61354" FPOGY="0.72685" FPOGS="418.039" FPOGD="0.050" FPOGID="1458" FPOGV="1" LPOGX="0.64583" LPOGY="0.76204" LPOGV="1" RPOGX="0.57708" RPOGY="0.68889" RPOGV="1" BPOGX="0.61146" BPOGY="0.72593" BPOGV="1" LPCX="0.31187" LPCY="0.72882" LPD="14.23" LPS="1.05" LPV="1" RPCX="0.70273" RPCY="0.68610" RPD="14.16" RPS="1.06" RPV="1" LEYEX="-3.074" LEYEY="-2.413" LEYEZ="57.599" LEYEV="1" LPUPILD="3.074" LPUPILV="1" REYEX="3.274" REYEY="-2.023" REYEZ="58.413" REYEV="1" RPUPILD="3.102" RPUPILV="1" CX="-0.80260" CY="0.07963" CS="0"/>
+
+<REC CNT="29540" TIME="418.105" TIME_TICK="16686909144" FPOGX="0.59740" FPOGY="0.65000" FPOGS="418.039" FPOGD="0.066" FPOGID="1458" FPOGV="1" LPOGX="0.55573" LPOGY="0.32407" LPOGV="1" RPOGX="0.50937" RPOGY="0.35741" RPOGV="1" BPOGX="0.53229" BPOGY="0.34074" BPOGV="1" LPCX="0.31103" LPCY="0.71482" LPD="14.87" LPS="1.05" LPV="1" RPCX="0.69942" RPCY="0.67387" RPD="13.91" RPS="1.06" RPV="1" LEYEX="-3.074" LEYEY="-2.413" LEYEZ="57.599" LEYEV="1" LPUPILD="3.212" LPUPILV="1" REYEX="3.274" REYEY="-2.023" REYEZ="58.413" REYEV="1" RPUPILD="3.046" RPUPILV="1" CX="-0.80260" CY="0.07963" CS="0"/>
+
+<REC CNT="29541" TIME="418.121" TIME_TICK="16686963944" FPOGX="0.58490" FPOGY="0.58426" FPOGS="418.039" FPOGD="0.082" FPOGID="1458" FPOGV="1" LPOGX="0.54792" LPOGY="0.21111" LPOGV="1" RPOGX="0.49740" RPOGY="0.29907" RPOGV="1" BPOGX="0.52240" BPOGY="0.25463" BPOGV="1" LPCX="0.31124" LPCY="0.71344" LPD="14.38" LPS="1.04" LPV="1" RPCX="0.69919" RPCY="0.67221" RPD="14.14" RPS="1.06" RPV="1" LEYEX="-3.074" LEYEY="-2.413" LEYEZ="57.599" LEYEV="1" LPUPILD="3.107" LPUPILV="1" REYEX="3.274" REYEY="-2.023" REYEZ="58.413" REYEV="1" RPUPILD="3.098" RPUPILV="1" CX="-0.80313" CY="0.07963" CS="0"/>
+
+<REC CNT="29542" TIME="418.138" TIME_TICK="16687018055" FPOGX="0.57552" FPOGY="0.53704" FPOGS="418.039" FPOGD="0.098" FPOGID="1458" FPOGV="1" LPOGX="0.54792" LPOGY="0.21204" LPOGV="1" RPOGX="0.49219" RPOGY="0.30000" RPOGV="1" BPOGX="0.51979" BPOGY="0.25648" BPOGV="1" LPCX="0.31124" LPCY="0.71344" LPD="14.38" LPS="1.04" LPV="1" RPCX="0.69908" RPCY="0.67224" RPD="14.32" RPS="1.06" RPV="1" LEYEX="-3.159" LEYEY="-2.445" LEYEZ="59.370" LEYEV="1" LPUPILD="3.202" LPUPILV="1" REYEX="3.208" REYEY="-1.947" REYEZ="57.427" REYEV="1" RPUPILD="3.085" RPUPILV="1" CX="-0.80417" CY="0.07963" CS="0"/>
+
+<REC CNT="29543" TIME="418.154" TIME_TICK="16687073158" FPOGX="0.56927" FPOGY="0.50000" FPOGS="418.039" FPOGD="0.115" FPOGID="1458" FPOGV="1" LPOGX="0.55365" LPOGY="0.17407" LPOGV="1" RPOGX="0.49271" RPOGY="0.30000" RPOGV="1" BPOGX="0.52292" BPOGY="0.23704" BPOGV="1" LPCX="0.31182" LPCY="0.71260" LPD="14.17" LPS="1.04" LPV="1" RPCX="0.70042" RPCY="0.67223" RPD="14.08" RPS="1.06" RPV="1" LEYEX="-3.159" LEYEY="-2.445" LEYEZ="59.370" LEYEV="1" LPUPILD="3.154" LPUPILV="1" REYEX="3.208" REYEY="-1.947" REYEZ="57.427" REYEV="1" RPUPILD="3.032" RPUPILV="1" CX="-0.80469" CY="0.08056" CS="0"/>
+
+<REC CNT="29544" TIME="418.171" TIME_TICK="16687127977" FPOGX="0.56406" FPOGY="0.47037" FPOGS="418.039" FPOGD="0.131" FPOGID="1458" FPOGV="1" LPOGX="0.55833" LPOGY="0.20278" LPOGV="1" RPOGX="0.49323" RPOGY="0.27037" RPOGV="1" BPOGX="0.52604" BPOGY="0.23611" BPOGV="1" LPCX="0.31221" LPCY="0.71239" LPD="13.56" LPS="1.04" LPV="1" RPCX="0.70103" RPCY="0.67184" RPD="14.25" RPS="1.06" RPV="1" LEYEX="-3.159" LEYEY="-2.445" LEYEZ="59.370" LEYEV="1" LPUPILD="3.019" LPUPILV="1" REYEX="3.208" REYEY="-1.947" REYEZ="57.427" REYEV="1" RPUPILD="3.068" RPUPILV="1" CX="-0.80625" CY="0.08056" CS="0"/>
+
+<REC CNT="29545" TIME="418.187" TIME_TICK="16687182280" FPOGX="0.56042" FPOGY="0.44630" FPOGS="418.039" FPOGD="0.148" FPOGID="1458" FPOGV="1" LPOGX="0.55833" LPOGY="0.20370" LPOGV="1" RPOGX="0.49687" RPOGY="0.26204" RPOGV="1" BPOGX="0.52760" BPOGY="0.23241" BPOGV="1" LPCX="0.31221" LPCY="0.71239" LPD="13.56" LPS="1.04" LPV="1" RPCX="0.70109" RPCY="0.67171" RPD="14.66" RPS="1.06" RPV="1" LEYEX="-3.121" LEYEY="-2.428" LEYEZ="59.108" LEYEV="1" LPUPILD="3.005" LPUPILV="1" REYEX="3.351" REYEY="-2.007" REYEZ="59.321" REYEV="1" RPUPILD="3.262" RPUPILV="1" CX="-0.80729" CY="0.08241" CS="0"/>
+
+<REC CNT="29546" TIME="418.204" TIME_TICK="16687237533" FPOGX="0.55677" FPOGY="0.42870" FPOGS="418.039" FPOGD="0.164" FPOGID="1458" FPOGV="1" LPOGX="0.56510" LPOGY="0.23426" LPOGV="1" RPOGX="0.47552" RPOGY="0.25926" RPOGV="1" BPOGX="0.52031" BPOGY="0.24722" BPOGV="1" LPCX="0.31356" LPCY="0.71272" LPD="13.63" LPS="1.04" LPV="1" RPCX="0.70258" RPCY="0.67209" RPD="13.61" RPS="1.06" RPV="1" LEYEX="-3.121" LEYEY="-2.428" LEYEZ="59.108" LEYEV="1" LPUPILD="3.021" LPUPILV="1" REYEX="3.351" REYEY="-2.007" REYEZ="59.321" REYEV="1" RPUPILD="3.028" RPUPILV="1" CX="-0.80729" CY="0.08426" CS="0"/>
+
+<REC CNT="29547" TIME="418.220" TIME_TICK="16687292182" FPOGX="0.54219" FPOGY="0.34815" FPOGS="418.039" FPOGD="0.164" FPOGID="1458" FPOGV="0" LPOGX="0.56094" LPOGY="0.19259" LPOGV="1" RPOGX="0.48854" RPOGY="0.26852" RPOGV="1" BPOGX="0.52500" BPOGY="0.23056" BPOGV="1" LPCX="0.31356" LPCY="0.71272" LPD="13.63" LPS="1.04" LPV="1" RPCX="0.70292" RPCY="0.67243" RPD="13.89" RPS="1.06" RPV="1" LEYEX="-3.121" LEYEY="-2.428" LEYEZ="59.108" LEYEV="1" LPUPILD="3.021" LPUPILV="1" REYEX="3.351" REYEY="-2.007" REYEZ="59.321" REYEV="1" RPUPILD="3.090" RPUPILV="1" CX="-0.80833" CY="0.08519" CS="0"/>
+
+<REC CNT="29548" TIME="418.236" TIME_TICK="16687346272" FPOGX="0.53333" FPOGY="0.28981" FPOGS="418.039" FPOGD="0.164" FPOGID="1458" FPOGV="0" LPOGX="0.56094" LPOGY="0.19444" LPOGV="1" RPOGX="0.48906" RPOGY="0.26759" RPOGV="1" BPOGX="0.52500" BPOGY="0.23148" BPOGV="1" LPCX="0.31356" LPCY="0.71272" LPD="13.63" LPS="1.04" LPV="1" RPCX="0.70292" RPCY="0.67243" RPD="13.89" RPS="1.06" RPV="1" LEYEX="-3.094" LEYEY="-2.420" LEYEZ="58.781" LEYEV="1" LPUPILD="3.004" LPUPILV="1" REYEX="3.333" REYEY="-1.996" REYEZ="58.783" REYEV="1" RPUPILD="3.061" RPUPILV="1" CX="-0.80937" CY="0.08611" CS="0"/>
+
+<REC CNT="29549" TIME="418.253" TIME_TICK="16687401682" FPOGX="0.53229" FPOGY="0.27407" FPOGS="418.039" FPOGD="0.164" FPOGID="1458" FPOGV="0" LPOGX="0.55833" LPOGY="0.20370" LPOGV="1" RPOGX="0.50104" RPOGY="0.27963" RPOGV="1" BPOGX="0.52969" BPOGY="0.24167" BPOGV="1" LPCX="0.31367" LPCY="0.71307" LPD="13.02" LPS="1.04" LPV="1" RPCX="0.70326" RPCY="0.67281" RPD="14.09" RPS="1.07" RPV="1" LEYEX="-3.094" LEYEY="-2.420" LEYEZ="58.781" LEYEV="1" LPUPILD="2.871" LPUPILV="1" REYEX="3.333" REYEY="-1.996" REYEZ="58.783" REYEV="1" RPUPILD="3.107" RPUPILV="1" CX="-0.80990" CY="0.08611" CS="0"/>
+
+
+
+TIME="418.089"	FPOGID="1458"	FPOGX="0.61354"	FPOGY="0.72685"	FPOGS="418.039"	FPOGD="0.050"	FPOGV="1"	BPOGX="0.61146" BPOGY="0.72593" BPOGV="1"
+							
+TIME="418.105"	FPOGID="1458"	FPOGX="0.59740"	FPOGY="0.65000"	FPOGS="418.039"	FPOGD="0.066"	FPOGV="1"	BPOGX="0.53229" BPOGY="0.34074" BPOGV="1"
+							
+TIME="418.121"	FPOGID="1458"	FPOGX="0.58490"	FPOGY="0.58426"	FPOGS="418.039"	FPOGD="0.082"	FPOGV="1"	BPOGX="0.52240" BPOGY="0.25463" BPOGV="1"
+							
+TIME="418.138"	FPOGID="1458"	FPOGX="0.57552"	FPOGY="0.53704"	FPOGS="418.039"	FPOGD="0.098"	FPOGV="1"	BPOGX="0.51979" BPOGY="0.25648" BPOGV="1"
+							
+TIME="418.154"	FPOGID="1458"	FPOGX="0.56927"	FPOGY="0.50000"	FPOGS="418.039"	FPOGD="0.115"	FPOGV="1"	BPOGX="0.52292" BPOGY="0.23704" BPOGV="1"
+							
+TIME="418.171"	FPOGID="1458"	FPOGX="0.56406"	FPOGY="0.47037"	FPOGS="418.039"	FPOGD="0.131"	FPOGV="1"	BPOGX="0.52604" BPOGY="0.23611" BPOGV="1"
+							
+TIME="418.187"	FPOGID="1458"	FPOGX="0.56042"	FPOGY="0.44630"	FPOGS="418.039"	FPOGD="0.148"	FPOGV="1"	BPOGX="0.52760" BPOGY="0.23241" BPOGV="1"
+							
+TIME="418.204"	FPOGID="1458"	FPOGX="0.55677"	FPOGY="0.42870"	FPOGS="418.039"	FPOGD="0.164"	FPOGV="1"	BPOGX="0.52031" BPOGY="0.24722" BPOGV="1"
+							
+TIME="418.220"	FPOGID="1458"	FPOGX="0.54219"	FPOGY="0.34815"	FPOGS="418.039"	FPOGD="0.164"	FPOGV="0"	BPOGX="0.52500" BPOGY="0.23056" BPOGV="1"
+							
+TIME="418.236"	FPOGID="1458"	FPOGX="0.53333"	FPOGY="0.28981"	FPOGS="418.039"	FPOGD="0.164"	FPOGV="0"	BPOGX="0.52500" BPOGY="0.23148" BPOGV="1"
+							
+TIME="418.253"	FPOGID="1458"	FPOGX="0.53229"	FPOGY="0.27407"	FPOGS="418.039"	FPOGD="0.164"	FPOGV="0"	BPOGX="0.52969" BPOGY="0.24167" BPOGV="1" 
+
+
+The TIME is always 0.016s or 0.017s apart.  This is the elapsed time in seconds.
+
+
+Here is the explanation
+-----------------------------
+FPOGX/Y are the co-ordinates for the center of a fixation point. It begins calculating a fixation after 3 best point of gaze points fall within approximately 50 pixels of each other. BPOGX and BPOGY are not related to a fixation but are the best point of gaze co-ordinates. They are the ‘best’ because they are an average of the gaze points of the left and right eye, unless an eye is closed in which case it uses the eye that it can still track to find BPOGX/Y.
+
+FPOGV or BPOGV being ‘1’ indicates that the data for that row is valid, and if it is ‘0’ then it is invalid. 
+
+When FPOGV = 1 that means that the gaze point still belongs to the current fixation. So if you refer to the Fixation Point with ID 2282 (FPOGID)  in the chart below the first three points meet the distance threshold (mentioned above) to still count towards the fixation, but the next six points do not. The next fixation with ID 2283 was triggered when the points at time 1696.596, 1696.613, 1696.629 met the fixation threshold and initiated a new fixation.
+ 
+When BPOGV = 1 the means that the tracker is able to give us a valid gaze point. The circumstance where that number would be 0 is when the tracker could not find either eye and thus could not give us any point of gaze.
+
+
+Which points do we use to represent a fixation point? 
+	Average all FPOGX/Y belonging to a given ID
+
+

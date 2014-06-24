@@ -1,0 +1,17 @@
+body{
+    overflow-y:visible;
+}
+
+#upload_button{
+    margin-left:10px;
+}
+
+.videos .video:nth-child(3n+1){
+    margin-left:0;
+}
+.video_area{
+    margin-bottom:10px;
+}
+.actions{
+    margin-bottom:50px;
+}

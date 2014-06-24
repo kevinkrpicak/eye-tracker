@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>HTML5 Video Testing</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=980, initial-scale=1.0" /> <!-- Layout on mobile browsers -->
+
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/reset.css" />
+</head>
+
+<body>
+    <div>
+        <!-- <video id="video" preload="none" controls poster="http://media.w3.org/2010/05/sintel/poster.png" width="720" height="320"> -->
+
+        <!-- Original video 1920x1080 scaled 0.3 -->
+        <video id="video" preload="none" controls width="576" height="324">
+            <!-- <source id="mp4" src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4"> -->
+            <source id='webm' src="../assets/recording.webmsd.webm" type="video/webm">
+            <!-- <source id="ogv" src="http://media.w3.org/2010/05/sintel/trailer.ogv" type="video/ogg"> -->
+            <p>Your user agent does not support the HTML5 Video element.</p>
+        </video>
+
+        <span class="time-frame"></span>
+    </div>
+    <div>
+        <button id="playback-button">toggle play</button>
+    </div>
+
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
